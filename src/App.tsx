@@ -1,7 +1,7 @@
-import { useState, FC } from 'react';
-import { Box } from '@mui/material';
+import { useState, FC } from "react";
+import { Box } from "@mui/material";
 
-import { ScrollPicker } from './components/ScrollPicker';
+import { ScrollPicker } from "./components/ScrollPicker";
 
 const App: FC = () => {
   const [value, setValue] = useState<number | null>(3);

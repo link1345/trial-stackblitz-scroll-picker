@@ -1,6 +1,6 @@
-import { useMemo, useRef, useEffect } from 'react';
-import { Box, MenuList, MenuItem, ListItemText } from '@mui/material';
-import { times, debounce } from 'lodash-es';
+import { useMemo, useRef, useEffect } from "react";
+import { Box, MenuList, MenuItem, ListItemText } from "@mui/material";
+import { times, debounce } from "lodash-es";
 
 /** 1つの項目の高さ */
 const ITEM_HEIGHT = 40;
@@ -45,12 +45,12 @@ export const ScrollPicker = function <V>({
       return;
     }
 
-    elMenuList.addEventListener('scroll', debouncedHandleScroll);
+    elMenuList.addEventListener("scroll", debouncedHandleScroll);
 
     return () => {
-      elMenuList.removeEventListener('scroll', debouncedHandleScroll);
+      elMenuList.removeEventListener("scroll", debouncedHandleScroll);
     };
-  }, []);
+  }, [debouncedHandleScroll]);
 
   useEffect(() => {
     const elMenuList = elMenuListRef.current;
@@ -68,25 +68,25 @@ export const ScrollPicker = function <V>({
     }
     elMenuList.scrollTo({
       top: targetIndex * ITEM_HEIGHT,
-      behavior: 'smooth',
+      behavior: "smooth",
     });
-  }, [value]);
+  }, [items, value]);
 
   return (
     <Box
       sx={{
-        position: 'relative',
+        position: "relative",
         height: NUM_SHOW_ITEM * ITEM_HEIGHT,
       }}
     >
       <MenuList
         ref={elMenuListRef}
         sx={{
-          height: '100%',
-          overflowY: 'scroll',
-          scrollSnapType: 'y mandatory',
-          '&::-webkit-scrollbar': {
-            display: 'none',
+          height: "100%",
+          overflowY: "scroll",
+          scrollSnapType: "y mandatory",
+          "&::-webkit-scrollbar": {
+            display: "none",
           },
         }}
         disablePadding
@@ -96,7 +96,7 @@ export const ScrollPicker = function <V>({
             key={`top-${index}`}
             sx={{
               height: ITEM_HEIGHT,
-              minHeight: 'auto',
+              minHeight: "auto",
             }}
             disabled
           ></MenuItem>
@@ -105,10 +105,10 @@ export const ScrollPicker = function <V>({
           <MenuItem
             key={String(item.value)}
             sx={{
-              scrollSnapAlign: 'center',
+              scrollSnapAlign: "center",
               height: ITEM_HEIGHT,
-              minHeight: 'auto',
-              textAlign: 'center',
+              minHeight: "auto",
+              textAlign: "center",
             }}
             selected={item.value === value}
             onClick={() => {
@@ -123,7 +123,7 @@ export const ScrollPicker = function <V>({
             key={`bottom-${index}`}
             sx={{
               height: ITEM_HEIGHT,
-              minHeight: 'auto',
+              minHeight: "auto",
             }}
             disabled
           ></MenuItem>
@@ -131,26 +131,26 @@ export const ScrollPicker = function <V>({
       </MenuList>
       <Box
         sx={{
-          position: 'absolute',
+          position: "absolute",
           top: 0,
           left: 0,
-          width: '100%',
-          height: '40%',
+          width: "100%",
+          height: "40%",
           background:
-            'linear-gradient(rgba(255, 255, 255, 1), rgba(255, 255, 255, 0))',
-          pointerEvents: 'none',
+            "linear-gradient(rgba(255, 255, 255, 1), rgba(255, 255, 255, 0))",
+          pointerEvents: "none",
         }}
       />
       <Box
         sx={{
-          position: 'absolute',
+          position: "absolute",
           bottom: 0,
           left: 0,
-          width: '100%',
-          height: '40%',
+          width: "100%",
+          height: "40%",
           background:
-            'linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))',
-          pointerEvents: 'none',
+            "linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))",
+          pointerEvents: "none",
         }}
       />
     </Box>
