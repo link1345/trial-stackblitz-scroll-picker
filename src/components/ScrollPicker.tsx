@@ -10,7 +10,7 @@ const NUM_SHOW_ITEM = 5;
 export type ScrollPickerProps<V> = {
   value: V | null;
   items: Array<{ value: V; label: string }>;
-  onChangeValue: (newValue: V | null) => void;
+  onChangeValue: (newValue: V) => void;
 };
 
 export const ScrollPicker = function <V>({
@@ -29,7 +29,7 @@ export const ScrollPicker = function <V>({
       if (elMenuList == null || !(elMenuList instanceof HTMLUListElement)) {
         return;
       }
-      console.log(elMenuList.scrollTop, elMenuList.clientHeight);
+
       const index = Math.round(elMenuList.scrollTop / ITEM_HEIGHT);
       const item = items[index];
       if (item == null) {
@@ -58,16 +58,21 @@ export const ScrollPicker = function <V>({
       return;
     }
 
+    const isFirstScroll = isFirstScrollRef.current;
+    isFirstScrollRef.current = false;
+
     const targetIndex = items.findIndex((item) => item.value === value);
     if (targetIndex < 0) {
       return;
     }
-    if (isFirstScrollRef.current) {
-      elMenuList.scrollTop = targetIndex * ITEM_HEIGHT;
-      isFirstScrollRef.current = false;
+
+    const scrollTop = targetIndex * ITEM_HEIGHT;
+    if (isFirstScroll) {
+      elMenuList.scrollTop = scrollTop;
+      return;
     }
     elMenuList.scrollTo({
-      top: targetIndex * ITEM_HEIGHT,
+      top: scrollTop,
       behavior: "smooth",
     });
   }, [items, value]);
@@ -115,7 +120,12 @@ export const ScrollPicker = function <V>({
               onChangeValue(item.value);
             }}
           >
-            <ListItemText primary={item.label} />
+            <ListItemText
+              sx={{
+                fontWeight: item.value === value ? "bold" : undefined,
+              }}
+              primary={item.label}
+            />
           </MenuItem>
         ))}
         {times(numPadItem).map((index) => (

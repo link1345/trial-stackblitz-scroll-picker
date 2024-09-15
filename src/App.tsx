@@ -1,13 +1,16 @@
 import { useState, FC } from "react";
-import { Box } from "@mui/material";
+import { Container, Stack, Typography } from "@mui/material";
+import { formatDate } from "date-fns";
 
 import { ScrollPicker } from "./components/ScrollPicker";
+import { DateScrollPicker } from "./components/DateScrollPicker";
 
 const App: FC = () => {
   const [value, setValue] = useState<number | null>(3);
+  const [currentDate, setCurrentDate] = useState<Date>(() => new Date());
 
   return (
-    <Box sx={{ p: 1 }}>
+    <Container sx={{ p: 1 }}>
       <div>value: {value}</div>
       <ScrollPicker
         value={value}
@@ -19,7 +22,14 @@ const App: FC = () => {
           setValue(newValue);
         }}
       />
-    </Box>
+      <hr />
+      <Typography sx={{ textAlign: "center" }}>
+        {formatDate(currentDate, "yyyy年MM月dd日")}
+      </Typography>
+      <Stack direction="row" justifyContent="center">
+        <DateScrollPicker value={currentDate} onChangeValue={setCurrentDate} />
+      </Stack>
+    </Container>
   );
 };
 
