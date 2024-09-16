@@ -1,5 +1,5 @@
 import { useState, FC } from "react";
-import { Container, Stack, Typography } from "@mui/material";
+import { Box, Container, Stack, Typography } from "@mui/material";
 import { formatDate } from "date-fns";
 
 import { ScrollPicker } from "./components/ScrollPicker";
@@ -12,16 +12,38 @@ const App: FC = () => {
   return (
     <Container sx={{ p: 1 }}>
       <div>value: {value}</div>
-      <ScrollPicker
-        value={value}
-        items={[...new Array(10)].map((_, index) => ({
-          value: index,
-          label: `項目${index}`,
-        }))}
-        onChangeValue={(newValue) => {
-          setValue(newValue);
-        }}
-      />
+      <Stack direction="row" spacing={2}>
+        <Box sx={{ flex: "1 1 0" }}>
+          <ScrollPicker
+            value={value}
+            items={[...new Array(20)].map((_, index) => {
+              return {
+                value: index,
+                label: `項目${index}`,
+              };
+            })}
+            onChangeValue={(newValue) => {
+              setValue(newValue);
+            }}
+          />
+        </Box>
+        <Box sx={{ flex: "1 1 0" }}>
+          <ScrollPicker
+            value={value}
+            items={[...new Array(20)].map((_, index) => {
+              const disabled = index % 2 === 0 || index % 3 === 0;
+              return {
+                value: index,
+                label: `項目${index}` + (disabled ? "（無効）" : ""),
+                disabled,
+              };
+            })}
+            onChangeValue={(newValue) => {
+              setValue(newValue);
+            }}
+          />
+        </Box>
+      </Stack>
       <hr />
       <Typography sx={{ textAlign: "center" }}>
         {formatDate(currentDate, "yyyy年MM月dd日")}

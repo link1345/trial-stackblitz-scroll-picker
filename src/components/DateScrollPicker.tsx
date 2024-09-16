@@ -3,12 +3,21 @@ import { Stack, Typography } from "@mui/material";
 import { ScrollPicker } from "./ScrollPicker";
 import { range } from "lodash-es";
 
-export type DataScrollPickerProps = {
+export type DateScrollPickerProps = {
+  /** 日付 */
   value: Date;
+  /** 最小日付 */
+  minDate?: Date;
+  /** 最大日付 */
+  maxDate?: Date;
+  /**
+   * 日付が変更された時
+   * @param newValue - 新しい日付
+   */
   onChangeValue: (newValue: Date) => void;
 };
 
-export const DateScrollPicker: FC<DataScrollPickerProps> = ({
+export const DateScrollPicker: FC<DateScrollPickerProps> = ({
   value,
   onChangeValue,
 }) => {
