@@ -5,16 +5,10 @@ import { times } from "lodash-es";
 import { SCROLL_ITEM_HEIGHT } from "./ScrollItemHeight";
 import { scrollToItemValue } from "./scrollToItemValue";
 import { useScrollItemValue } from "./useScrollItemValue";
+import { ScrollItem } from "./ScrollItemType";
 
 /** 見える項目の数 */
 const NUM_SHOW_ITEM = 5;
-
-/** スクロールして選択する項目 */
-type ScrollItem<V> = {
-  value: V;
-  label: string;
-  disabled?: boolean;
-};
 
 export type ScrollPickerProps<V> = {
   /** 選択中の値 */
