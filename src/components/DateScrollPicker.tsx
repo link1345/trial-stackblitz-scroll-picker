@@ -19,6 +19,9 @@ export const DateScrollPicker: FC<DataScrollPickerProps> = ({
       day: value.getDate(),
     };
   }, [value]);
+  const maxDayOfCurrentMonth = useMemo(() => {
+    return new Date(year, month, 0).getDate();
+  }, [month, year]);
 
   return (
     <Stack direction="row" spacing={1} alignItems="center">
@@ -29,7 +32,16 @@ export const DateScrollPicker: FC<DataScrollPickerProps> = ({
           label: `${year}`,
         }))}
         onChangeValue={(newYear) => {
-          onChangeValue(new Date(newYear, month - 1, day));
+          /** 次の年月の最大日数 */
+          const maxDayOfNextMonthYear = new Date(newYear, month, 0).getDate();
+          onChangeValue(
+            new Date(
+              newYear,
+              month - 1,
+              // 最大日数を超えないように調整
+              Math.min(day, maxDayOfNextMonthYear)
+            )
+          );
         }}
       />
       <Typography>年</Typography>
@@ -40,13 +52,22 @@ export const DateScrollPicker: FC<DataScrollPickerProps> = ({
           label: `${month}`,
         }))}
         onChangeValue={(newMonth) => {
-          onChangeValue(new Date(year, newMonth - 1, day));
+          /** 次の月の最大日数 */
+          const maxDayOfNextMonth = new Date(year, newMonth, 0).getDate();
+          onChangeValue(
+            new Date(
+              year,
+              newMonth - 1,
+              // 最大日数を超えないように調整
+              Math.min(day, maxDayOfNextMonth)
+            )
+          );
         }}
       />
       <Typography>月</Typography>
       <ScrollPicker
         value={day}
-        items={range(1, 32).map((day) => ({
+        items={range(1, maxDayOfCurrentMonth + 1).map((day) => ({
           value: day,
           label: `${day}`,
         }))}

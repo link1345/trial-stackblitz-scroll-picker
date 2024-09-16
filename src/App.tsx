@@ -27,7 +27,12 @@ const App: FC = () => {
         {formatDate(currentDate, "yyyy年MM月dd日")}
       </Typography>
       <Stack direction="row" justifyContent="center">
-        <DateScrollPicker value={currentDate} onChangeValue={setCurrentDate} />
+        <DateScrollPicker
+          value={currentDate}
+          onChangeValue={(newDate) => {
+            setCurrentDate(newDate);
+          }}
+        />
       </Stack>
     </Container>
   );

@@ -1,11 +1,28 @@
-import { useMemo, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { Box, MenuList, MenuItem, ListItemText } from "@mui/material";
-import { times, debounce } from "lodash-es";
+import { times } from "lodash-es";
 
 /** 1つの項目の高さ */
 const ITEM_HEIGHT = 40;
 /** 見える項目の数 */
 const NUM_SHOW_ITEM = 5;
+
+/**
+ * ul要素のscrollTopから中央の項目の値を取得する
+ * @param elMenuList - ul要素
+ * @param items - 項目リスト
+ */
+const pickCenterIndexValue = function <V>(
+  elMenuList: HTMLUListElement,
+  items: Array<{ value: V; label: string }>
+) {
+  const index = Math.round(elMenuList.scrollTop / ITEM_HEIGHT);
+  const item = items[index];
+  if (item == null) {
+    return undefined;
+  }
+  return item.value;
+};
 
 export type ScrollPickerProps<V> = {
   value: V | null;
@@ -23,34 +40,37 @@ export const ScrollPicker = function <V>({
   const elMenuListRef = useRef<HTMLUListElement | null>(null);
   const numPadItem = Math.floor(NUM_SHOW_ITEM / 2);
 
-  const debouncedHandleScroll = useMemo(() => {
-    return debounce((event: Event) => {
-      const elMenuList = event.target;
-      if (elMenuList == null || !(elMenuList instanceof HTMLUListElement)) {
-        return;
-      }
-
-      const index = Math.round(elMenuList.scrollTop / ITEM_HEIGHT);
-      const item = items[index];
-      if (item == null) {
-        return;
-      }
-      onChangeValue(item.value);
-    }, 100);
-  }, [items, onChangeValue]);
-
   useEffect(() => {
     const elMenuList = elMenuListRef.current;
     if (elMenuList == null) {
       return;
     }
 
+    let timerId: number | undefined;
+    const debouncedHandleScroll = (event: Event) => {
+      clearTimeout(timerId);
+
+      const elMenuList = event.target;
+      if (elMenuList == null || !(elMenuList instanceof HTMLUListElement)) {
+        return;
+      }
+
+      timerId = window.setTimeout(() => {
+        const itemValue = pickCenterIndexValue(elMenuList, items);
+        if (itemValue === undefined) {
+          return;
+        }
+        onChangeValue(itemValue);
+      }, 100);
+    };
+
     elMenuList.addEventListener("scroll", debouncedHandleScroll);
 
     return () => {
       elMenuList.removeEventListener("scroll", debouncedHandleScroll);
+      clearTimeout(timerId);
     };
-  }, [debouncedHandleScroll]);
+  }, [items, onChangeValue]);
 
   useEffect(() => {
     const elMenuList = elMenuListRef.current;
@@ -122,7 +142,9 @@ export const ScrollPicker = function <V>({
           >
             <ListItemText
               sx={{
-                fontWeight: item.value === value ? "bold" : undefined,
+                "& > .MuiListItemText-primary": {
+                  fontWeight: item.value === value ? "bold" : undefined,
+                },
               }}
               primary={item.label}
             />
