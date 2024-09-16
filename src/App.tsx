@@ -4,10 +4,12 @@ import { formatDate } from "date-fns";
 
 import { ScrollPicker } from "./components/ScrollPicker";
 import { DateScrollPicker } from "./components/DateScrollPicker";
+import { InputDateByScrollPicker } from "./components/InputDateByScrollPicker";
 
 const App: FC = () => {
   const [value, setValue] = useState<number | null>(3);
-  const [currentDate, setCurrentDate] = useState<Date>(() => new Date());
+  const [pickerDate, setPickerDate] = useState<Date>(() => new Date());
+  const [currentDate, setCurrentDate] = useState<Date | null>(null);
 
   return (
     <Container sx={{ p: 1 }}>
@@ -46,16 +48,25 @@ const App: FC = () => {
       </Stack>
       <hr />
       <Typography sx={{ textAlign: "center" }}>
-        {formatDate(currentDate, "yyyy年MM月dd日")}
+        {formatDate(pickerDate, "yyyy年MM月dd日")}
       </Typography>
       <Stack direction="row" justifyContent="center">
         <DateScrollPicker
+          value={pickerDate}
+          onChangeValue={(newDate) => {
+            setPickerDate(newDate);
+          }}
+        />
+      </Stack>
+      <hr />
+      <Box sx={{ width: 250, margin: "0 auto" }}>
+        <InputDateByScrollPicker
           value={currentDate}
           onChangeValue={(newDate) => {
             setCurrentDate(newDate);
           }}
         />
-      </Stack>
+      </Box>
     </Container>
   );
 };
