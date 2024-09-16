@@ -7,11 +7,12 @@ import { SCROLL_ITEM_HEIGHT } from "./ScrollItemHeight";
 /**
  * ul要素のscrollTopから選択可能な項目の値を取得する
  * @param elMenuList - ul要素
+ * @param currentValue - 現在の値
  * @param items - 項目リスト
  */
 const findSelectableScrollItemValue = function <V>(
   elMenuList: HTMLUListElement,
-  currentValue: V | null,
+  currentValue: V,
   items: ScrollItem<V>[]
 ): V | undefined {
   const index = Math.round(elMenuList.scrollTop / SCROLL_ITEM_HEIGHT);
@@ -31,8 +32,7 @@ const findSelectableScrollItemValue = function <V>(
   }
   // 同じ場所を指した場合は現在の値を返す
   if (currentIndex === index) {
-    // MEMO: currentValueはnullを受け入れない方が良さそう
-    return currentValue ?? undefined;
+    return currentValue;
   }
 
   const possiblyTopItems = items.slice(0, index).reverse();
@@ -70,7 +70,7 @@ const findSelectableScrollItemValue = function <V>(
     return possiblyBottomItems[possiblyBottomItemIndex]?.value;
   }
   // それ以外のケースはあり得ないが、念のため現在の値を返す
-  return currentValue ?? undefined;
+  return currentValue;
 };
 
 /**
@@ -83,7 +83,7 @@ export const useScrollItemValue = <V>({
   onChangeValue,
 }: {
   elMenuListRef: MutableRefObject<HTMLUListElement | null>;
-  currentValue: V | null;
+  currentValue: V;
   items: ScrollItem<V>[];
   onChangeValue: (newValue: V) => void;
 }) => {

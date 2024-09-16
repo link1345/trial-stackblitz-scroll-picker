@@ -18,7 +18,7 @@ type ScrollItem<V> = {
 
 export type ScrollPickerProps<V> = {
   /** 選択中の値 */
-  value: V | null;
+  value: V;
   /** 選択リスト */
   items: ScrollItem<V>[];
   /**
