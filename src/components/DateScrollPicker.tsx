@@ -5,8 +5,8 @@ import { range } from "lodash-es";
 import { addYears, clamp as clampDate } from "date-fns";
 
 const CURRENT_DATE = new Date();
-const DEFAULT_MIN_DATE = addYears(CURRENT_DATE, -10);
-const DEFAULT_MAX_DATE = addYears(CURRENT_DATE, 10);
+const DEFAULT_MIN_DATE = addYears(CURRENT_DATE, -100);
+const DEFAULT_MAX_DATE = addYears(CURRENT_DATE, 100);
 
 export type DateScrollPickerProps = {
   /** 日付 */
