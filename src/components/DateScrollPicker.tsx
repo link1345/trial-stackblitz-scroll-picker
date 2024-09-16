@@ -1,7 +1,12 @@
-import { FC, useMemo } from "react";
+import { FC, useMemo, useCallback } from "react";
 import { Stack, Typography } from "@mui/material";
 import { ScrollPicker } from "./ScrollPicker";
 import { range } from "lodash-es";
+import { addYears, clamp as clampDate } from "date-fns";
+
+const CURRENT_DATE = new Date();
+const DEFAULT_MIN_DATE = addYears(CURRENT_DATE, -10);
+const DEFAULT_MAX_DATE = addYears(CURRENT_DATE, 10);
 
 export type DateScrollPickerProps = {
   /** 日付 */
@@ -19,6 +24,8 @@ export type DateScrollPickerProps = {
 
 export const DateScrollPicker: FC<DateScrollPickerProps> = ({
   value,
+  minDate = DEFAULT_MIN_DATE,
+  maxDate = DEFAULT_MAX_DATE,
   onChangeValue,
 }) => {
   const { year, month, day } = useMemo(() => {
@@ -32,18 +39,60 @@ export const DateScrollPicker: FC<DateScrollPickerProps> = ({
     return new Date(year, month, 0).getDate();
   }, [month, year]);
 
+  const yearItems = useMemo(() => {
+    return range(minDate.getFullYear(), maxDate.getFullYear() + 1).map(
+      (year) => ({
+        value: year,
+        label: `${year}`,
+      })
+    );
+  }, [minDate, maxDate]);
+
+  const monthItems = useMemo(() => {
+    return range(1, 13).map((month) => {
+      const yearMonthFirst = new Date(year, month - 1, 1);
+      const yearMonthLast = new Date(year, month, 0);
+      return {
+        value: month,
+        label: `${month}`,
+        disabled: yearMonthLast < minDate || yearMonthFirst > maxDate,
+      };
+    });
+  }, [maxDate, minDate, year]);
+
+  const dayItems = useMemo(() => {
+    return range(1, maxDayOfCurrentMonth + 1).map((day) => {
+      const dateFirst = new Date(year, month - 1, day, 0, 0, 0);
+      const dateLast = new Date(year, month - 1, day, 23, 59, 59);
+      return {
+        value: day,
+        label: `${day}`,
+        disabled: dateLast < minDate || dateFirst > maxDate,
+      };
+    });
+  }, [maxDate, maxDayOfCurrentMonth, minDate, month, year]);
+
+  const handleChangeValue = useCallback(
+    (newDate: Date) => {
+      onChangeValue(
+        clampDate(newDate, {
+          start: minDate,
+          end: maxDate,
+        })
+      );
+    },
+    [maxDate, minDate, onChangeValue]
+  );
+
   return (
     <Stack direction="row" spacing={1} alignItems="center">
       <ScrollPicker
         value={year}
-        items={range(1900, 2100).map((year) => ({
-          value: year,
-          label: `${year}`,
-        }))}
+        items={yearItems}
         onChangeValue={(newYear) => {
           /** 次の年月の最大日数 */
           const maxDayOfNextMonthYear = new Date(newYear, month, 0).getDate();
-          onChangeValue(
+          handleChangeValue(
             new Date(
               newYear,
               month - 1,
@@ -56,14 +105,11 @@ export const DateScrollPicker: FC<DateScrollPickerProps> = ({
       <Typography>年</Typography>
       <ScrollPicker
         value={month}
-        items={range(1, 13).map((month) => ({
-          value: month,
-          label: `${month}`,
-        }))}
+        items={monthItems}
         onChangeValue={(newMonth) => {
           /** 次の月の最大日数 */
           const maxDayOfNextMonth = new Date(year, newMonth, 0).getDate();
-          onChangeValue(
+          handleChangeValue(
             new Date(
               year,
               newMonth - 1,
@@ -76,12 +122,9 @@ export const DateScrollPicker: FC<DateScrollPickerProps> = ({
       <Typography>月</Typography>
       <ScrollPicker
         value={day}
-        items={range(1, maxDayOfCurrentMonth + 1).map((day) => ({
-          value: day,
-          label: `${day}`,
-        }))}
+        items={dayItems}
         onChangeValue={(newDay) => {
-          onChangeValue(new Date(year, month - 1, newDay));
+          handleChangeValue(new Date(year, month - 1, newDay));
         }}
       />
       <Typography>日</Typography>
