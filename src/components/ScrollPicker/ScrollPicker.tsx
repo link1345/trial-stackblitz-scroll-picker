@@ -10,7 +10,7 @@ import { times } from "lodash-es";
 
 import { SCROLL_ITEM_HEIGHT } from "./ScrollItemHeight";
 import { scrollToItemValue } from "./scrollToItemValue";
-import { useWatchScrollForItemValue } from "./useWatchScrollForItemValue";
+import { findSelectableScrollItemValue } from "./useWatchScrollForItemValue";
 import { ScrollItem } from "./ScrollItemType";
 import { useHandleScroll } from "./useHandleScroll";
 
@@ -39,13 +39,6 @@ export const ScrollPicker = function <V>({
   const elMenuListRef = useRef<HTMLUListElement | null>(null);
   const numPadItem = Math.floor(NUM_SHOW_ITEM / 2);
 
-  useWatchScrollForItemValue({
-    elMenuListRef,
-    currentValue: value,
-    items,
-    onChangeValue,
-  });
-
   useEffect(() => {
     const elMenuList = elMenuListRef.current;
     if (elMenuList == null) {
@@ -60,7 +53,24 @@ export const ScrollPicker = function <V>({
     });
   }, [items, value]);
 
-  const { ref: refScroller } = useHandleScroll();
+  const { ref: refScroller } = useHandleScroll({
+    onFinishScroll: () => {
+      const elMenuList = elMenuListRef.current;
+      if (elMenuList == null) {
+        return;
+      }
+      const itemValue = findSelectableScrollItemValue(elMenuList, value, items);
+      if (itemValue === undefined) {
+        return;
+      }
+      // 同じ値を算出した場合は同じ場所に戻るようにスクロールして終了する
+      if (itemValue === value) {
+        scrollToItemValue(elMenuList, items, itemValue);
+        return;
+      }
+      onChangeValue(itemValue);
+    },
+  });
   const handleRef = useForkRef(elMenuListRef, refScroller);
 
   return (

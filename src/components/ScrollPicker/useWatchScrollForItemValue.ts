@@ -10,7 +10,7 @@ import { SCROLL_ITEM_HEIGHT } from "./ScrollItemHeight";
  * @param currentValue - 現在の値
  * @param items - 項目リスト
  */
-const findSelectableScrollItemValue = function <V>(
+export const findSelectableScrollItemValue = function <V>(
   elMenuList: HTMLUListElement,
   currentValue: V,
   items: ScrollItem<V>[]
@@ -111,10 +111,8 @@ export const useWatchScrollForItemValue = <V>({
         if (itemValue === undefined) {
           return;
         }
-        console.log("scroll end");
         // 同じ値を算出した場合は同じ場所に戻るようにスクロールして終了する
         if (itemValue === currentValue) {
-          console.log("same value");
           scrollToItemValue(elMenuList, items, itemValue);
           return;
         }
