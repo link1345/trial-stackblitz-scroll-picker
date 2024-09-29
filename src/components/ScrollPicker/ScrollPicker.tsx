@@ -1,11 +1,18 @@
 import { useRef, useEffect } from "react";
-import { Box, MenuList, MenuItem, ListItemText } from "@mui/material";
+import {
+  Box,
+  MenuList,
+  MenuItem,
+  ListItemText,
+  useForkRef,
+} from "@mui/material";
 import { times } from "lodash-es";
 
 import { SCROLL_ITEM_HEIGHT } from "./ScrollItemHeight";
 import { scrollToItemValue } from "./scrollToItemValue";
 import { useWatchScrollForItemValue } from "./useWatchScrollForItemValue";
 import { ScrollItem } from "./ScrollItemType";
+import { useHandleScroll } from "./useHandleScroll";
 
 /** 見える項目の数 */
 const NUM_SHOW_ITEM = 5;
@@ -53,6 +60,9 @@ export const ScrollPicker = function <V>({
     });
   }, [items, value]);
 
+  const { ref: refScroller } = useHandleScroll();
+  const handleRef = useForkRef(elMenuListRef, refScroller);
+
   return (
     <Box
       sx={{
@@ -61,7 +71,7 @@ export const ScrollPicker = function <V>({
       }}
     >
       <MenuList
-        ref={elMenuListRef}
+        ref={handleRef}
         sx={{
           height: "100%",
           overflowY: "scroll",

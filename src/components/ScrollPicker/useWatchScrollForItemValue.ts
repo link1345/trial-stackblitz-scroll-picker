@@ -111,8 +111,10 @@ export const useWatchScrollForItemValue = <V>({
         if (itemValue === undefined) {
           return;
         }
+        console.log("scroll end");
         // 同じ値を算出した場合は同じ場所に戻るようにスクロールして終了する
         if (itemValue === currentValue) {
+          console.log("same value");
           scrollToItemValue(elMenuList, items, itemValue);
           return;
         }
