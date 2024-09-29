@@ -4,7 +4,7 @@ import { times } from "lodash-es";
 
 import { SCROLL_ITEM_HEIGHT } from "./ScrollItemHeight";
 import { scrollToItemValue } from "./scrollToItemValue";
-import { useScrollItemValue } from "./useScrollItemValue";
+import { useWatchScrollForItemValue } from "./useWatchScrollForItemValue";
 import { ScrollItem } from "./ScrollItemType";
 
 /** 見える項目の数 */
@@ -32,7 +32,7 @@ export const ScrollPicker = function <V>({
   const elMenuListRef = useRef<HTMLUListElement | null>(null);
   const numPadItem = Math.floor(NUM_SHOW_ITEM / 2);
 
-  useScrollItemValue({
+  useWatchScrollForItemValue({
     elMenuListRef,
     currentValue: value,
     items,

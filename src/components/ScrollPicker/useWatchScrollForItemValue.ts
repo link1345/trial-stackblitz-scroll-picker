@@ -76,7 +76,7 @@ const findSelectableScrollItemValue = function <V>(
 /**
  * スクロールを監視して項目の値を取得する
  */
-export const useScrollItemValue = <V>({
+export const useWatchScrollForItemValue = <V>({
   elMenuListRef,
   currentValue,
   items,
