@@ -8,6 +8,7 @@ import {
   Dialog,
   DialogContent,
   DialogActions,
+  Popover,
 } from "@mui/material";
 import EventIcon from "@mui/icons-material/Event";
 import CloseIcon from "@mui/icons-material/Close";
@@ -52,6 +53,12 @@ const DEFAULT_INITIAL_PICKER_DATE = new Date();
 export type InputDateByScrollPickerProps = {
   /** 日付 */
   value: Date | null;
+  /**
+   * Pickerを表示する際に使うUI
+   * - "dialog": ダイアログ
+   * - "popover": ポップアップ
+   */
+  pickerUi: "dialog" | "popover";
   /** valueがnullの時にPickerに初期表示する日付 */
   initialPickerDate?: Date;
   /**
@@ -63,11 +70,13 @@ export type InputDateByScrollPickerProps = {
 
 export const InputDateByScrollPicker: FC<InputDateByScrollPickerProps> = ({
   value,
+  pickerUi,
   initialPickerDate = DEFAULT_INITIAL_PICKER_DATE,
   onChangeValue,
   ...restProps
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [elAnchor, setElAnchor] = useState<HTMLElement | null>(null);
 
   return (
     <>
@@ -103,28 +112,63 @@ export const InputDateByScrollPicker: FC<InputDateByScrollPickerProps> = ({
             },
           },
         }}
-        onClick={() => {
+        onClick={(event) => {
           setIsOpen(true);
+          setElAnchor(event.currentTarget);
         }}
       />
-      <Dialog
-        open={isOpen}
-        onClose={() => {
-          setIsOpen(false);
-        }}
-      >
-        <InputDateContent
-          {...restProps}
-          initialDate={value ?? initialPickerDate}
-          onCancel={() => {
+      {pickerUi === "dialog" && (
+        <Dialog
+          open={isOpen}
+          onClose={() => {
             setIsOpen(false);
           }}
-          onSubmit={(newDate) => {
-            onChangeValue(newDate);
-            setIsOpen(false);
+        >
+          <InputDateContent
+            {...restProps}
+            initialDate={value ?? initialPickerDate}
+            onCancel={() => {
+              setIsOpen(false);
+            }}
+            onSubmit={(newDate) => {
+              onChangeValue(newDate);
+              setIsOpen(false);
+            }}
+          />
+        </Dialog>
+      )}
+      {pickerUi === "popover" && (
+        <Popover
+          open={elAnchor != null && isOpen}
+          anchorEl={elAnchor}
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "center",
           }}
-        />
-      </Dialog>
+          transformOrigin={{
+            vertical: "top",
+            horizontal: "center",
+          }}
+          onClose={() => {
+            setIsOpen(false);
+            setElAnchor(null);
+          }}
+        >
+          <InputDateContent
+            {...restProps}
+            initialDate={value ?? initialPickerDate}
+            onCancel={() => {
+              setIsOpen(false);
+              setElAnchor(null);
+            }}
+            onSubmit={(newDate) => {
+              onChangeValue(newDate);
+              setIsOpen(false);
+              setElAnchor(null);
+            }}
+          />
+        </Popover>
+      )}
     </>
   );
 };

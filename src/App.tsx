@@ -59,14 +59,40 @@ const App: FC = () => {
         />
       </Stack>
       <hr />
-      <Box sx={{ width: 250, margin: "0 auto" }}>
-        <InputDateByScrollPicker
-          value={currentDate}
-          onChangeValue={(newDate) => {
-            setCurrentDate(newDate);
-          }}
-        />
-      </Box>
+      <Stack
+        direction={{
+          xs: "column",
+          sm: "row",
+        }}
+        spacing={2}
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Box sx={{ width: 250, margin: "0 auto" }}>
+          <Typography>ダイアログパターン</Typography>
+          <InputDateByScrollPicker
+            pickerUi="dialog"
+            value={currentDate}
+            onChangeValue={(newDate) => {
+              setCurrentDate(newDate);
+            }}
+          />
+        </Box>
+        <Box sx={{ width: 250, margin: "0 auto" }}>
+          <Typography>ポップアップパターン</Typography>
+          <InputDateByScrollPicker
+            pickerUi="popover"
+            value={currentDate}
+            onChangeValue={(newDate) => {
+              setCurrentDate(newDate);
+            }}
+          />
+        </Box>
+      </Stack>
+      <Box
+        // 余白用
+        sx={{ height: 400 }}
+      />
     </Container>
   );
 };
