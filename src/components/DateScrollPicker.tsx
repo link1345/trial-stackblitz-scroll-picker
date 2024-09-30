@@ -50,8 +50,8 @@ export const DateScrollPicker: FC<DateScrollPickerProps> = ({
 
   const monthItems = useMemo(() => {
     return range(1, 13).map((month) => {
-      const yearMonthFirst = new Date(year, month - 1, 1);
-      const yearMonthLast = new Date(year, month, 0);
+      const yearMonthFirst = new Date(year, month - 1, 1, 0, 0, 0);
+      const yearMonthLast = new Date(year, month, 0, 23, 59, 59);
       return {
         value: month,
         label: `${month}`,
