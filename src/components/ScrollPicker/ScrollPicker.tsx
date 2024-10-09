@@ -1,17 +1,12 @@
 import { useRef, useEffect } from "react";
-import {
-  Box,
-  MenuList,
-  MenuItem,
-  ListItemText,
-  useForkRef,
-} from "@mui/material";
+import { Box, MenuList, MenuItem, useForkRef } from "@mui/material";
 import { times } from "lodash-es";
 
 import { SCROLL_ITEM_HEIGHT } from "./ScrollItemHeight";
 import { scrollToItemValue } from "./scrollToItemValue";
 import { findSelectableScrollItemValue } from "./findSelectableScrollItemValue";
 import { ScrollItem } from "./ScrollItemType";
+import { ScrollPickerItem } from "./ScrollPickerItem";
 import { useHandleScroll } from "./useHandleScroll";
 
 /** 見える項目の数 */
@@ -102,29 +97,16 @@ export const ScrollPicker = function <V>({
           ></MenuItem>
         ))}
         {items.map((item) => (
-          <MenuItem
+          <ScrollPickerItem
             key={String(item.value)}
-            sx={{
-              scrollSnapAlign: "center",
-              height: SCROLL_ITEM_HEIGHT,
-              minHeight: "auto",
-              textAlign: "center",
-            }}
             selected={item.value === value}
             disabled={item.disabled}
-            onClick={() => {
+            onJustClick={() => {
               onChangeValue(item.value);
             }}
           >
-            <ListItemText
-              sx={{
-                "& > .MuiListItemText-primary": {
-                  fontWeight: item.value === value ? "bold" : undefined,
-                },
-              }}
-              primary={item.label}
-            />
-          </MenuItem>
+            {item.label}
+          </ScrollPickerItem>
         ))}
         {times(numPadItem).map((index) => (
           <MenuItem
