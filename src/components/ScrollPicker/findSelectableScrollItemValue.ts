@@ -1,7 +1,4 @@
-import { MutableRefObject, useEffect } from "react";
-
 import { ScrollItem } from "./ScrollItemType";
-import { scrollToItemValue } from "./scrollToItemValue";
 import { SCROLL_ITEM_HEIGHT } from "./ScrollItemHeight";
 
 /**
@@ -71,60 +68,4 @@ export const findSelectableScrollItemValue = function <V>(
   }
   // それ以外のケースはあり得ないが、念のため現在の値を返す
   return currentValue;
-};
-
-/**
- * スクロールを監視して項目の値を取得する
- */
-export const useWatchScrollForItemValue = <V>({
-  elMenuListRef,
-  currentValue,
-  items,
-  onChangeValue,
-}: {
-  elMenuListRef: MutableRefObject<HTMLUListElement | null>;
-  currentValue: V;
-  items: ScrollItem<V>[];
-  onChangeValue: (newValue: V) => void;
-}) => {
-  useEffect(() => {
-    const elMenuList = elMenuListRef.current;
-    if (elMenuList == null) {
-      return;
-    }
-
-    let timerId: number | undefined;
-    const debouncedHandleScroll = (event: Event) => {
-      clearTimeout(timerId);
-
-      const elMenuList = event.target;
-      if (elMenuList == null || !(elMenuList instanceof HTMLUListElement)) {
-        return;
-      }
-
-      timerId = window.setTimeout(() => {
-        const itemValue = findSelectableScrollItemValue(
-          elMenuList,
-          currentValue,
-          items
-        );
-        if (itemValue === undefined) {
-          return;
-        }
-        // 同じ値を算出した場合は同じ場所に戻るようにスクロールして終了する
-        if (itemValue === currentValue) {
-          scrollToItemValue(elMenuList, items, itemValue);
-          return;
-        }
-        onChangeValue(itemValue);
-      }, 100);
-    };
-
-    elMenuList.addEventListener("scroll", debouncedHandleScroll);
-
-    return () => {
-      elMenuList.removeEventListener("scroll", debouncedHandleScroll);
-      clearTimeout(timerId);
-    };
-  }, [currentValue, elMenuListRef, items, onChangeValue]);
 };
