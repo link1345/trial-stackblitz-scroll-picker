@@ -1,7 +1,7 @@
 import { ListItemText, MenuItem } from "@mui/material";
 import type { FC, ReactNode } from "react";
 
-import { SCROLL_ITEM_HEIGHT } from "./ScrollItemHeight";
+import { SCROLL_ITEM_HEIGHT } from "./constants/ScrollItemHeight";
 import { useJustClick } from "./hooks/useJustClick";
 
 export type ScrollPickerItemProps = {

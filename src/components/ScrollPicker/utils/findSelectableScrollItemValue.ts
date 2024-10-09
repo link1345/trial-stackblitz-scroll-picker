@@ -1,5 +1,5 @@
-import { ScrollItem } from "./ScrollItemType";
-import { SCROLL_ITEM_HEIGHT } from "./ScrollItemHeight";
+import { ScrollItem } from "../types/ScrollItemType";
+import { SCROLL_ITEM_HEIGHT } from "../constants/ScrollItemHeight";
 
 /**
  * ul要素のscrollTopから選択可能な項目の値を取得する
