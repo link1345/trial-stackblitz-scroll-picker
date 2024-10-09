@@ -8,6 +8,10 @@ import { ScrollItem } from "./types/ScrollItemType";
 import { ScrollPickerItem } from "./ScrollPickerItem";
 import { useHandleScroll } from "./hooks/useHandleScroll";
 
+/**
+ * 擬似要素に設定する影のスタイルを生成する
+ * @param position - 配置させる位置
+ */
 const createPseudoShadowStyle = (
   position: "top" | "bottom"
 ): CSSProperties => ({
