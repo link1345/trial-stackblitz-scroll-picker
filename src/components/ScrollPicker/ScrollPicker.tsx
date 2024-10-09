@@ -10,7 +10,7 @@ import { times } from "lodash-es";
 
 import { SCROLL_ITEM_HEIGHT } from "./ScrollItemHeight";
 import { scrollToItemValue } from "./scrollToItemValue";
-import { findSelectableScrollItemValue } from "./useWatchScrollForItemValue";
+import { findSelectableScrollItemValue } from "./findSelectableScrollItemValue";
 import { ScrollItem } from "./ScrollItemType";
 import { useHandleScroll } from "./useHandleScroll";
 
