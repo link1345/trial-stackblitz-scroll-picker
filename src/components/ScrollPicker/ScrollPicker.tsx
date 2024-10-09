@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, CSSProperties } from "react";
 import { Box, MenuList, MenuItem, useForkRef } from "@mui/material";
 
 import { SCROLL_ITEM_HEIGHT } from "./constants/ScrollItemHeight";
@@ -7,6 +7,21 @@ import { findSelectableScrollItemValue } from "./utils/findSelectableScrollItemV
 import { ScrollItem } from "./types/ScrollItemType";
 import { ScrollPickerItem } from "./ScrollPickerItem";
 import { useHandleScroll } from "./hooks/useHandleScroll";
+
+const createPseudoShadowStyle = (
+  position: "top" | "bottom"
+): CSSProperties => ({
+  content: '""',
+  position: "absolute",
+  zIndex: 1,
+  top: position === "top" ? 0 : undefined,
+  bottom: position === "bottom" ? 0 : undefined,
+  left: 0,
+  width: "100%",
+  height: "40%",
+  background: `linear-gradient(to ${position}, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))`,
+  pointerEvents: "none",
+});
 
 export type ScrollPickerProps<V> = {
   /** 選択中の値 */
@@ -73,6 +88,8 @@ export const ScrollPicker = function <V>({
       sx={{
         position: "relative",
         height,
+        "&::before": createPseudoShadowStyle("top"),
+        "&::after": createPseudoShadowStyle("bottom"),
       }}
     >
       <MenuList
@@ -115,30 +132,6 @@ export const ScrollPicker = function <V>({
           disabled
         />
       </MenuList>
-      <Box
-        sx={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "40%",
-          background:
-            "linear-gradient(rgba(255, 255, 255, 1), rgba(255, 255, 255, 0))",
-          pointerEvents: "none",
-        }}
-      />
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: 0,
-          left: 0,
-          width: "100%",
-          height: "40%",
-          background:
-            "linear-gradient(rgba(255, 255, 255, 0), rgba(255, 255, 255, 1))",
-          pointerEvents: "none",
-        }}
-      />
     </Box>
   );
 };
