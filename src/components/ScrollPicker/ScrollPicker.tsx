@@ -1,6 +1,5 @@
 import { useRef, useEffect } from "react";
 import { Box, MenuList, MenuItem, useForkRef } from "@mui/material";
-import { times } from "lodash-es";
 
 import { SCROLL_ITEM_HEIGHT } from "./constants/ScrollItemHeight";
 import { scrollToItemValue } from "./utils/scrollToItemValue";
@@ -9,14 +8,13 @@ import { ScrollItem } from "./types/ScrollItemType";
 import { ScrollPickerItem } from "./ScrollPickerItem";
 import { useHandleScroll } from "./hooks/useHandleScroll";
 
-/** 見える項目の数 */
-const NUM_SHOW_ITEM = 5;
-
 export type ScrollPickerProps<V> = {
   /** 選択中の値 */
   value: V;
   /** 選択リスト */
   items: ScrollItem<V>[];
+  /** スクローラーの高さ */
+  height?: number;
   /**
    * 値が変更された時
    * @param newValue - 新しい値
@@ -27,12 +25,14 @@ export type ScrollPickerProps<V> = {
 export const ScrollPicker = function <V>({
   value,
   items,
+  height = 5 * SCROLL_ITEM_HEIGHT,
   onChangeValue,
 }: ScrollPickerProps<V>) {
   /** 初回のスクロールか（初回はアニメーションではなく直接scrollTopを変更する） */
   const isFirstScrollRef = useRef<boolean>(true);
   const elMenuListRef = useRef<HTMLUListElement | null>(null);
-  const numPadItem = Math.floor(NUM_SHOW_ITEM / 2);
+  /** スクロールの始端・終端がピッタリ真ん中で収まるように調整する余白の高さ */
+  const paddingHeight = (height - SCROLL_ITEM_HEIGHT) / 2;
 
   useEffect(() => {
     const elMenuList = elMenuListRef.current;
@@ -72,7 +72,7 @@ export const ScrollPicker = function <V>({
     <Box
       sx={{
         position: "relative",
-        height: NUM_SHOW_ITEM * SCROLL_ITEM_HEIGHT,
+        height,
       }}
     >
       <MenuList
@@ -86,16 +86,14 @@ export const ScrollPicker = function <V>({
         }}
         disablePadding
       >
-        {times(numPadItem).map((index) => (
-          <MenuItem
-            key={`top-${index}`}
-            sx={{
-              height: SCROLL_ITEM_HEIGHT,
-              minHeight: "auto",
-            }}
-            disabled
-          ></MenuItem>
-        ))}
+        <MenuItem
+          key={`pad-top`}
+          sx={{
+            height: paddingHeight,
+            minHeight: "auto",
+          }}
+          disabled
+        />
         {items.map((item) => (
           <ScrollPickerItem
             key={String(item.value)}
@@ -108,16 +106,14 @@ export const ScrollPicker = function <V>({
             {item.label}
           </ScrollPickerItem>
         ))}
-        {times(numPadItem).map((index) => (
-          <MenuItem
-            key={`bottom-${index}`}
-            sx={{
-              height: SCROLL_ITEM_HEIGHT,
-              minHeight: "auto",
-            }}
-            disabled
-          ></MenuItem>
-        ))}
+        <MenuItem
+          key={`pad-bottom`}
+          sx={{
+            height: paddingHeight,
+            minHeight: "auto",
+          }}
+          disabled
+        />
       </MenuList>
       <Box
         sx={{
