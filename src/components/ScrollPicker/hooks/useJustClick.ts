@@ -41,14 +41,16 @@ export const useJustClick = ({
     /** クリック開始座標 */
     let startPos: { x: number; y: number } | null = null;
     const handlePointerDown = (event: PointerEvent) => {
-      event.preventDefault();
+      // イベントをブロックするとmousedownイベントが発火しなくなるのでpreventDefaultはしない
+      // event.preventDefault();
       startPos = {
         x: event.clientX,
         y: event.clientY,
       };
     };
     const handlePointerUp = (event: PointerEvent) => {
-      event.preventDefault();
+      // イベントをブロックするとmouseupイベントが発火しなくなるのでpreventDefaultはしない
+      // event.preventDefault();
       if (startPos == null) {
         return;
       }
