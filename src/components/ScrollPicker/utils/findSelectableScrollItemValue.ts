@@ -8,7 +8,7 @@ import { SCROLL_ITEM_HEIGHT } from "../constants/ScrollItemHeight";
  * @param items - 項目リスト
  */
 export const findSelectableScrollItemValue = function <V>(
-  elMenuList: HTMLUListElement,
+  elMenuList: HTMLElement,
   currentValue: V,
   items: ScrollItem<V>[]
 ): V | undefined {

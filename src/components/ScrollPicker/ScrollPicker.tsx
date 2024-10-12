@@ -49,7 +49,7 @@ export const ScrollPicker = function <V>({
 }: ScrollPickerProps<V>) {
   /** 初回のスクロールか（初回はアニメーションではなく直接scrollTopを変更する） */
   const isFirstScrollRef = useRef<boolean>(true);
-  const elMenuListRef = useRef<HTMLUListElement | null>(null);
+  const elMenuListRef = useRef<HTMLElement | null>(null);
   /** スクロールの始端・終端がピッタリ真ん中で収まるように調整する余白の高さ */
   const paddingHeight = (height - SCROLL_ITEM_HEIGHT) / 2;
 

@@ -9,7 +9,7 @@ import { SCROLL_ITEM_HEIGHT } from "../constants/ScrollItemHeight";
  * @param options - オプション
  */
 export const scrollToItemValue = function <V>(
-  elMenuList: HTMLUListElement,
+  elMenuList: HTMLElement,
   items: ScrollItem<V>[],
   targetValue: V,
   {
