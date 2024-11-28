@@ -9,5 +9,8 @@
   // 保存時にauto fixさせる
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "vscode.typescript-language-features"
   }
 }

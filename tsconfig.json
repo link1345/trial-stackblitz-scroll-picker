@@ -1,7 +1,13 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ]
+  "compilerOptions": {
+    "composite": true ,
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "declaration": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx"
+  },
+  "include": ["vite.config.ts","vite.config.examples.ts"]
 }

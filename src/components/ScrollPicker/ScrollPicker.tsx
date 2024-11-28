@@ -1,4 +1,4 @@
-import { useRef, useEffect, CSSProperties } from "react";
+import React, { useRef, useEffect, CSSProperties } from "react";
 import { Box, MenuList, MenuItem, useForkRef } from "@mui/material";
 
 import { SCROLL_ITEM_HEIGHT } from "./constants/ScrollItemHeight";

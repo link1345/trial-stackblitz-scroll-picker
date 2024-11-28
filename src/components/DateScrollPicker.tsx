@@ -1,6 +1,6 @@
-import { FC, useMemo, useCallback } from "react";
+import React, { FC, useMemo, useCallback } from "react";
 import { Stack, Typography } from "@mui/material";
-import { ScrollPicker } from "./ScrollPicker";
+import { ScrollPicker } from "./ScrollPicker/ScrollPicker";
 import { range } from "lodash-es";
 import { addYears, clamp as clampDate } from "date-fns";
 

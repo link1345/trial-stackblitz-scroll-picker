@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import React, { FC, useState } from "react";
 import { formatDate } from "date-fns";
 import {
   TextField,
@@ -10,8 +10,6 @@ import {
   DialogActions,
   Popover,
 } from "@mui/material";
-import EventIcon from "@mui/icons-material/Event";
-import CloseIcon from "@mui/icons-material/Close";
 
 import { DateScrollPicker, DateScrollPickerProps } from "./DateScrollPicker";
 
@@ -98,10 +96,8 @@ export const InputDateByScrollPicker: FC<InputDateByScrollPickerProps> = ({
                       onChangeValue(null);
                     }}
                   >
-                    <CloseIcon />
                   </IconButton>
                 )}
-                <EventIcon />
               </InputAdornment>
             ),
             sx: {
